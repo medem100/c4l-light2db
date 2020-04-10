@@ -9,21 +9,21 @@ public class DB {
 
     private static Logger logger;
 
-
+    /** the current instance */
     private static DB OBJ = getInstance();
+    /** the current connection */
     private static Connection conn = null;
-//    public Select Select = new Select();
-//    public Insert Insert = new Insert();
-//    public Update Update = new Update();
-//    public Create Create = new Create();
 
-    //static Logger logger = Logger.getLogger(DB.class);
-
-    public static void main(String[] args) {
-        DB db = DB.getInstance();
-    }
+ //   public Select Select = new Select();
+ //   public Insert Insert = new Insert();
+    public Update Update = new Update();
 
 
+
+    /**
+     * default Constructor to handel the logger
+     * an crate the connection
+     */
     private DB() {
         String path = DB.class.getClassLoader()
                 .getResource("logging.properties")
@@ -35,6 +35,10 @@ public class DB {
 
     }
 
+    /**
+     * Get an instance of an handel object for the DB
+     * @return instance of DB
+     */
     public static synchronized DB getInstance() {
         if (DB.OBJ == null) {
             logger.config("Create new db instance");
@@ -43,6 +47,11 @@ public class DB {
         return DB.OBJ;
     }
 
+    /**
+     * Create an connection to the db which
+     * is defined in the Constants
+     * @return Connection to the DB
+     */
     private Connection getConnection() {
         try {
             logger.config("Create ne Connection");
