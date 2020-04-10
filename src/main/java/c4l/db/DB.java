@@ -18,7 +18,7 @@ public class DB {
  //   public Select Select = new Select();
  //   public Insert Insert = new Insert();
     public Update Update;
-
+    public Delete Delete;
 
 
     /**
@@ -35,6 +35,7 @@ public class DB {
         conn = getConnection();
 
         this.Update = new Update(conn);
+        this.Delete = new Delete(conn);
     }
 
     /**
