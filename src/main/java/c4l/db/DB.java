@@ -16,7 +16,7 @@ public class DB {
     private static Connection conn = null;
 
  //   public Select Select = new Select();
- //   public Insert Insert = new Insert();
+    public Insert Insert;
     public Update Update;
     public Delete Delete;
 
@@ -36,6 +36,7 @@ public class DB {
 
         this.Update = new Update(conn);
         this.Delete = new Delete(conn);
+        this.Insert = new Insert(conn);
     }
 
     /**
