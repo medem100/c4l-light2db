@@ -1,6 +1,7 @@
 package c4l.db;
 
 import c4l.db.util.Device;
+import c4l.db.util.Util;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -30,10 +31,10 @@ public class Update {
         ArrayList<Integer> deviceStatusIDs = select.getDeviceStatusIdsForScene(id);
         int iterator = 0;
         for (int dsid : deviceStatusIDs) {
-            deletEffects(dsid);
+           DB.getInstance().Delete.effectsFromDeviceState(dsid);
             insert.insertEffectStatis(devices[iterator].effects, dsid, false);
             insert.insertEffectStatis(devices[iterator].main_effect, dsid, true);
-            String SQL = "update device_status set input ='" + toSaveString(devices[iterator].getInputs())
+            String SQL = "update device_status set input ='" + Util.toSaveString(devices[iterator].getInputs())
                     + "' where device_status_id= " + dsid;
             updateDbData(SQL);
             iterator++;
@@ -63,7 +64,7 @@ public class Update {
             Statement query = conn.createStatement();
             query.execute(SQL);
         } catch (SQLException e) {
-            log.severe("Fail to Update DB wit SQL: " );
+            log.severe("Fail to Update DB wit SQL: " + e.toString() );
         }
     }
 
