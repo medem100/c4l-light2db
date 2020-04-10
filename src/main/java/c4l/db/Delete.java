@@ -26,7 +26,7 @@ public class Delete {
         // TODO delete effect and device statis
 
         try {
-            conn = dbCreate.getInstance();
+
             Statement query = conn.createStatement();
             //	query.executeUpdate(SQLDeleteSceneSelf);
             query.executeUpdate(SQLDeleteSetupHasScene);
@@ -51,7 +51,6 @@ public class Delete {
         // TODO delete effect and device statis
 
         try {
-            conn = dbCreate.getInstance();
             Statement query = conn.createStatement();
             query.executeUpdate(SQLDeleteSetupHasChase);
 
