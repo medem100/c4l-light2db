@@ -16,7 +16,7 @@ public class DB {
 
  //   public Select Select = new Select();
  //   public Insert Insert = new Insert();
-    public Update Update = new Update();
+    public Update Update;
 
 
 
@@ -33,6 +33,7 @@ public class DB {
 
         conn = getConnection();
 
+        this.Update = new Update(conn);
     }
 
     /**

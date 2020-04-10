@@ -26,19 +26,19 @@ public class Update {
     public void sceneName(int id , String name) {
         log.config("update scene name for: " + id +" -> " +name);
         String SQL = "update scene set scene_name = '"+name+"' where scene_id = "+id+";";
-        updatDbData(SQL);
+        updateDbData(SQL);
     }
 
-    private void updatDbData(String SQL) {
-
+    /**
+     * generic function to update the DB with an SQL Statement
+     * @param SQL to executeSQL
+     */
+    private void updateDbData(String SQL) {
         try {
-
             Statement query = conn.createStatement();
             query.execute(SQL);
-
         } catch (SQLException e) {
-            //logger.error(e);
-
+            log.severe("Fail to Update DB wit SQL: " );
         }
     }
 
