@@ -1,8 +1,11 @@
 package c4l.db;
 
+import c4l.db.util.Device;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class Update {
@@ -17,6 +20,28 @@ public class Update {
         db =  DB.getInstance();
         log = Logger.getLogger(Update.class.getName());
     }
+
+    /**
+     *
+     * @param devices
+     * @param id
+     */
+    public void scene(Device[] devices, int id) {
+        ArrayList<Integer> deviceStatusIDs = select.getDeviceStatusIdsForScene(id);
+        int iterator = 0;
+        for (int dsid : deviceStatusIDs) {
+            deletEffects(dsid);
+            insert.insertEffectStatis(devices[iterator].effects, dsid, false);
+            insert.insertEffectStatis(devices[iterator].main_effect, dsid, true);
+            String SQL = "update device_status set input ='" + toSaveString(devices[iterator].getInputs())
+                    + "' where device_status_id= " + dsid;
+            updateDbData(SQL);
+            iterator++;
+        }
+        // TODO insert rest devices
+
+    }
+
 
     /**
      * Update an Scene name
@@ -41,6 +66,8 @@ public class Update {
             log.severe("Fail to Update DB wit SQL: " );
         }
     }
+
+
 
 
 

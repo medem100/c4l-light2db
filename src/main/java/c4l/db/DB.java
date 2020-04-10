@@ -1,8 +1,9 @@
 package c4l.db;
 
+import c4l.db.util.Constants;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DB {

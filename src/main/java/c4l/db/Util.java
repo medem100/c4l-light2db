@@ -1,5 +1,7 @@
 package c4l.db;
 
+import c4l.db.util.Constants;
+
 public class Util {
 
     /**

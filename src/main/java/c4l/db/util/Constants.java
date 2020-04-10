@@ -1,4 +1,4 @@
-package c4l.db;
+package c4l.db.util;
 
 public class Constants {
 
