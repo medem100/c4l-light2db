@@ -23,9 +23,9 @@ public class Update {
     }
 
     /**
-     *
-     * @param devices
-     * @param id
+     * update one Scene
+     * @param devices new state of the Devices
+     * @param id id of scene
      */
     public void scene(Device[] devices, int id) {
         ArrayList<Integer> deviceStatusIDs = select.getDeviceStatusIdsForScene(id);
