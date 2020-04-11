@@ -58,6 +58,7 @@ public class Delete {
         } catch (SQLException e) {
             log.severe("Fail to Delete Chase : " + e.toString());
             throw new SQLException(e);
+
         }
 
     }
