@@ -27,7 +27,7 @@ public class Update {
      * @param devices new state of the Devices
      * @param id id of scene
      */
-    public void scene(Device[] devices, int id) {
+    public void scene(Device[] devices, int id) throws SQLException {
         ArrayList<Integer> deviceStatusIDs = select.getDeviceStatusIdsForScene(id);
         int iterator = 0;
         for (int dsid : deviceStatusIDs) {
@@ -49,7 +49,7 @@ public class Update {
      * @param id id of the scene
      * @param name new name of the scene
      */
-    public void sceneName(int id , String name) {
+    public void sceneName(int id , String name) throws SQLException {
         log.config("update scene name for: " + id +" -> " +name);
         String SQL = "update scene set scene_name = '"+name+"' where scene_id = "+id+";";
         updateDbData(SQL);
@@ -59,20 +59,14 @@ public class Update {
      * generic function to update the DB with an SQL Statement
      * @param SQL to executeSQL
      */
-    private void updateDbData(String SQL) {
+    private void updateDbData(String SQL) throws SQLException {
         try {
             Statement query = conn.createStatement();
             query.execute(SQL);
         } catch (SQLException e) {
             log.severe("Fail to Update DB wit SQL: " + e.toString() );
+            throw new SQLException(e);
         }
     }
-
-
-
-
-
-
-
 
 }

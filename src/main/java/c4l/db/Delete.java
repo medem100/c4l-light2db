@@ -19,7 +19,7 @@ public class Delete {
      *
      * @param id id of the scene
      */
-    public void scene(int id) {
+    public void scene(int id) throws SQLException {
         String SQLDeleteSetupHasScene = "delete from setup_has_scene where scene_id=" + id + ";";
         String SQLDeleteChaseHasScene = "delete from chase_has_scene where scene_id=" + id + ";";
 
@@ -34,6 +34,7 @@ public class Delete {
 
         } catch (SQLException e) {
             log.severe("Fail to Delete Scene " + e.toString());
+            throw new SQLException(e);
         }
 
     }
@@ -45,7 +46,7 @@ public class Delete {
      * @param id      id of the chase
      * @param setupid setup id
      */
-    public void chase(int id, int setupid) {
+    public void chase(int id, int setupid) throws SQLException {
         String SQLDeleteSetupHasChase = "delete from setup_has_chase where setUp_id=" + setupid + "and case_id=" + id + ";";
 
         // TODO delete effect and device statis
@@ -56,6 +57,7 @@ public class Delete {
 
         } catch (SQLException e) {
             log.severe("Fail to Delete Chase : " + e.toString());
+            throw new SQLException(e);
         }
 
     }
@@ -64,7 +66,7 @@ public class Delete {
      * Delete the effects From the Device Status
      * @param dsid device State id
      */
-    protected void effectsFromDeviceState(int dsid) {
+    protected void effectsFromDeviceState(int dsid) throws SQLException {
         String SQL = "delete from effect_status where device_status_id = " + dsid;
         Statement query = null;
         try {
@@ -72,6 +74,7 @@ public class Delete {
             query.executeUpdate(SQL);
         } catch (SQLException throwables) {
             log.severe("Fail to Delete Effect from status id : " + throwables.toString());
+            throw new SQLException(throwables);
         }
     }
 
@@ -81,7 +84,7 @@ public class Delete {
      *
      * @param chaseId id of the chase
      */
-    protected void chaseHasScene(int chaseId) {
+    protected void chaseHasScene(int chaseId) throws SQLException {
 
         String SQLDeleteChaseHasScene = "delete from chase_has_scene where case_id=" + chaseId + ";";
 
@@ -90,6 +93,7 @@ public class Delete {
             query.executeUpdate(SQLDeleteChaseHasScene);
         } catch (SQLException e) {
             log.severe("Fail to Delete Chase has Scene :" + e.toString());
+            throw new SQLException(e);
         }
 
     }

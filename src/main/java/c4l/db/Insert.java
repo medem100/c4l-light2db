@@ -26,7 +26,7 @@ public class Insert {
      * @param showTimes show times of the different scenes
      * @return
      */
-    public Integer chase(String name, String description, int setupID, int[] sceneIds, int[] fadeTimes, int[] showTimes) {
+    public Integer chase(String name, String description, int setupID, int[] sceneIds, int[] fadeTimes, int[] showTimes) throws SQLException {
         log.config("insert Case");
 
         try {
@@ -53,7 +53,7 @@ public class Insert {
 
         } catch (SQLException e) {
             log.severe("Fail to insert Chase "+ e.toString());
-            return null;
+            throw new SQLException(e);
         }
 
     }
@@ -65,7 +65,7 @@ public class Insert {
      * @param fadeTimes fade times between the scenes of the Chase
      * @param showTimes show times of the different scenes
      */
-    protected void chaseHasScene(int chaseid, int[] scnenIds, int[] fadeTimes, int[] showTimes) {
+    protected void chaseHasScene(int chaseid, int[] scnenIds, int[] fadeTimes, int[] showTimes) throws SQLException {
         log.config("insert chaseHasScene");
 
         try {
@@ -82,6 +82,7 @@ public class Insert {
 
         } catch (SQLException e) {
             log.severe("Fail to inset Scenes for Chase : " + e.toString());
+            throw  new SQLException(e);
         }
     }
 
