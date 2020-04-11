@@ -13,6 +13,8 @@ public interface Effect {
     public int getState();
     public void setState(int state);
 
+    public boolean isAcceptInput();
+
 
 
 
