@@ -19,5 +19,7 @@ public class Constants {
     public static final String DEFAULT_NEW_DESCRIPTIOM ="New Scene -- descritpion";
 
     public static final String DELIMITER = ";";
+    /** number of channels of a device */
+    public static final int DEVICE_CHANNELS = 16;
 
 }
