@@ -101,7 +101,7 @@ public class Insert {
      * @return the Id of the new Scene
      * @throws Exception
      */
-    public Integer scene(Device[] Devices, int setupID, String name, String description) throws Exception {
+    public Integer scene(Device[] Devices, int setupID, String name, String description, Effect_ID effect_id) throws Exception {
         log.config("insert new scene");
 
         try {
@@ -130,9 +130,9 @@ public class Insert {
                     int deviceSID = keys.getInt(1);
                     deviceStatusIDs.add(deviceSID);
                     // save main effects
-                    insertEffectStatis(device.main_effect, deviceSID, true);
+                    insertEffectStatis(device.main_effect, deviceSID, true , effect_id);
                     // save effects
-                    insertEffectStatis(device.effects, deviceSID, false);
+                    insertEffectStatis(device.effects, deviceSID, false, effect_id);
 
                 } else {
                     throw new Exception("Device not Found: sid:" + setupID + " addres: "
@@ -161,7 +161,7 @@ public class Insert {
      *
      * @param effect
      */
-    protected ResultSet insertEffectStatis(LinkedList<Effect> effects, int deviceStatusId, boolean isMain) {
+    protected ResultSet insertEffectStatis(LinkedList<Effect> effects, int deviceStatusId, boolean isMain , Effect_ID effect_id) {
         log.config("insert effect status for device statusID: " + deviceStatusId);
         String INSERT_EFFECT_STATUS = "insert into effect_status(size,speed,channels,accept_input,state,Device_status_id,Effect_id,is_main)"
                 + "values(?,?,?,?,?,?,?,?);";
@@ -177,7 +177,7 @@ public class Insert {
                 insertNewEffectStatusStatment.setInt(4, effect.isAcceptInput() ? 1 : 0);
                 insertNewEffectStatusStatment.setInt(5, effect.getState());
                 insertNewEffectStatusStatment.setInt(6, deviceStatusId);
-                insertNewEffectStatusStatment.setString(7, Effect_ID.getEffectID(effect).toString());
+                insertNewEffectStatusStatment.setString(7, effect_id.getEffectID(effect).toString());
                 insertNewEffectStatusStatment.setInt(8, isMain ? 1 : 0);
                 insertNewEffectStatusStatment.addBatch();
             }
