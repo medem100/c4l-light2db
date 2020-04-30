@@ -270,5 +270,51 @@ public class Insert {
         }
     }
 
+    /**
+     * insert new device
+     *
+     * @param permutation permutation of the Device Channels
+     * @param description Description of the Device
+     * @param name Name of the Device
+     * @param rotaryChannels channels for the rotary encoder
+     * @param startAddress start address of the device
+     * @param virtualDimmerChannel channel of the virtual dimmer
+     * @param virtualDimming channels which are affected by the virtual dimmer
+     * @param deviceCategory Category of the device
+     * @param mainEffectChannels channels of the main effect
+     * @return new Device id
+     */
+    public Integer device(int[] permutation, String description, String name, int[] rotaryChannels, int startAddress,
+                          int virtualDimmerChannel, int[] virtualDimming, int deviceCategory, int[] mainEffectChannels) throws SQLException {
+        log.config("insert device");
+        try {
+            String SQL = "insert into device (permutation,device_description,device_name,start_address,virtual_dimmer_channel,virtual_dimming,device_category_id,rotary_channels,main_effect_channels)"
+                    + "values(?,?,?,?,?,?,?,?,?)";
+            PreparedStatement preparedStmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+
+            preparedStmt.setString(1, toSaveString(permutation));
+            preparedStmt.setString(2, description);
+            preparedStmt.setString(3, name);
+            preparedStmt.setInt(4, startAddress);
+            preparedStmt.setInt(5, virtualDimmerChannel);
+            preparedStmt.setString(6, toSaveString(virtualDimming));
+            preparedStmt.setInt(7, deviceCategory);
+            preparedStmt.setString(8, toSaveString(rotaryChannels));
+            preparedStmt.setString(9, toSaveString(mainEffectChannels));
+
+            preparedStmt.execute();
+
+            ResultSet rs = preparedStmt.getGeneratedKeys();
+            rs.next();
+            return rs.getInt(1);
+
+        } catch (SQLException e) {
+            log.severe("can´t insert device"+ e);
+            throw new SQLException(e);
+
+        }
+
+    }
+
 
 }
