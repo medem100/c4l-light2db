@@ -201,7 +201,7 @@ public class Insert {
      * @param setUpID Id of the setup to add to
      * @param sceneID Id of the Scene which will add
      */
-    private void addSceneToSetUp(int setUpID, int sceneID) throws SQLException {
+    public void addSceneToSetUp(int setUpID, int sceneID) throws SQLException {
         log.config("scene: " + sceneID + " to setup: " + setUpID);
         String INSERT_SCENE_TO_SETUP = "insert into setup_has_scene(setUp_id,scene_id) values(?,?)";
         try {
@@ -213,6 +213,35 @@ public class Insert {
             log.severe("Fail to add Scene to Setup " + e.toString());
             throw new SQLException(e);
         }
+    }
+
+    /**
+     * crate new scene entry returns the new id
+     *
+     * @param name name of the new Scene
+     * @param description description of the new Scene
+     * @return id of the new scene
+     */
+    private Integer createScene(String name, String description) throws SQLException {
+        log.config("create new scene");
+        String INSERT_SCENE = "insert into scene(scene_name,scene_description) values(?,?)";
+        try {
+            PreparedStatement insertNewSceneStatment = conn.prepareStatement(INSERT_SCENE,
+                    Statement.RETURN_GENERATED_KEYS);
+
+            insertNewSceneStatment.setString(1, name);
+            insertNewSceneStatment.setString(2, description);
+            insertNewSceneStatment.execute();
+
+            ResultSet rs = insertNewSceneStatment.getGeneratedKeys();
+            rs.next();
+            return rs.getInt(1);
+
+        } catch (SQLException e) {
+            log.severe("Fail to Create a new Scene " +e);
+            throw new SQLException(e);
+        }
+
     }
 
 
