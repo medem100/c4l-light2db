@@ -1,6 +1,7 @@
 package c4l.db;
 
 import c4l.db.util.Device;
+import c4l.db.util.Effect_ID;
 import c4l.db.util.Util;
 
 import java.sql.Connection;
@@ -28,13 +29,13 @@ public class Update {
      * @param devices new state of the Devices
      * @param id      id of scene
      */
-    public void scene(Device[] devices, int id) throws SQLException {
+    public void scene(Device[] devices, int id , Effect_ID effect_id) throws SQLException {
         ArrayList<Integer> deviceStatusIDs = select.getDeviceStatusIdsForScene(id);
         int iterator = 0;
         for (int deviceStatusid : deviceStatusIDs) {
             db.Delete.effectsFromDeviceState(deviceStatusid);
-            db.Insert.insertEffectStatis(devices[iterator].effects, deviceStatusid, false);
-            db.Insert.insertEffectStatis(devices[iterator].main_effect, deviceStatusid, true);
+            db.Insert.insertEffectStates(devices[iterator].effects, deviceStatusid, false , effect_id);
+            db.Insert.insertEffectStates(devices[iterator].main_effect, deviceStatusid, true , effect_id);
             String SQL = "update device_status set input ='" + Util.toSaveString(devices[iterator].getInputs())
                     + "' where device_status_id= " + deviceStatusid;
             updateDbData(SQL);
