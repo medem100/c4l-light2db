@@ -130,9 +130,9 @@ public class Insert {
                     int deviceSID = keys.getInt(1);
                     deviceStatusIDs.add(deviceSID);
                     // save main effects
-                    insertEffectStatis(device.main_effect, deviceSID, true , effect_id);
+                    insertEffectStates(device.main_effect, deviceSID, true , effect_id);
                     // save effects
-                    insertEffectStatis(device.effects, deviceSID, false, effect_id);
+                    insertEffectStates(device.effects, deviceSID, false, effect_id);
 
                 } else {
                     throw new Exception("Device not Found: sid:" + setupID + " addres: "
@@ -157,11 +157,15 @@ public class Insert {
     }
 
     /**
-     * insert new effect status
-     *
-     * @param effect
+     * insert the States of effects from an Device status
+     * @param effects effect which should be saved
+     * @param deviceStatusId the id of the device status for the effects
+     * @param isMain is it a main effect
+     * @param effect_id an effect_id instance to get the ids of the effects
+     * @return ids of the effect states
+     * @throws SQLException
      */
-    protected ResultSet insertEffectStatis(LinkedList<Effect> effects, int deviceStatusId, boolean isMain , Effect_ID effect_id) {
+    protected ResultSet insertEffectStates(LinkedList<Effect> effects, int deviceStatusId, boolean isMain , Effect_ID effect_id) throws SQLException {
         log.config("insert effect status for device statusID: " + deviceStatusId);
         String INSERT_EFFECT_STATUS = "insert into effect_status(size,speed,channels,accept_input,state,Device_status_id,Effect_id,is_main)"
                 + "values(?,?,?,?,?,?,?,?);";
@@ -184,11 +188,31 @@ public class Insert {
             insertNewEffectStatusStatment.executeBatch();
             return insertNewEffectStatusStatment.getGeneratedKeys();
         } catch (SQLException e) {
-            logger.error(e);
-            return null;
+            log.severe("Fail to insert the Effect Statis " + toString());
+            throw new SQLException(e);
 
         }
 
+    }
+
+    /**
+     * add new Scene to a setup
+     *
+     * @param setUpID Id of the setup to add to
+     * @param sceneID Id of the Scene which will add
+     */
+    private void addSceneToSetUp(int setUpID, int sceneID) throws SQLException {
+        log.config("scene: " + sceneID + " to setup: " + setUpID);
+        String INSERT_SCENE_TO_SETUP = "insert into setup_has_scene(setUp_id,scene_id) values(?,?)";
+        try {
+            PreparedStatement insertNewSceneStatement = conn.prepareStatement(INSERT_SCENE_TO_SETUP);
+            insertNewSceneStatement.setInt(1, setUpID);
+            insertNewSceneStatement.setInt(2, sceneID);
+            insertNewSceneStatement.execute();
+        } catch (SQLException e) {
+            log.severe("Fail to add Scene to Setup " + e.toString());
+            throw new SQLException(e);
+        }
     }
 
 
