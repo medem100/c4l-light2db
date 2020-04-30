@@ -58,11 +58,25 @@ public class Update {
     }
 
 
+    /**
+     * Update the name of an Chase
+     * @param chaseid id of the chase
+     * @param name new Name of the chase
+     * @throws SQLException
+     */
     public void chaseName(int chaseid, String name) throws SQLException {
         String SQL = "update chase set chase_name='" + name + "' where chase_id=" + chaseid + ";";
         updateDbData(SQL);
     }
 
+    /**
+     *  Update the scenes of the chase
+     * @param chaseId id of the chase
+     * @param sceneIds ids of the new Scenes
+     * @param fadeTimes Fade times between the new Scenes
+     * @param showTimes Show times of the new Scenes
+     * @throws SQLException
+     */
     public void chaseScens(int chaseId, int[] sceneIds, int[] fadeTimes, int[] showTimes) throws SQLException {
         DB db = DB.getInstance();
         db.Delete.chaseHasScene(chaseId);
