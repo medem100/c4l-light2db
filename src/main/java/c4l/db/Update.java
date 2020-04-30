@@ -16,26 +16,27 @@ public class Update {
     private DB db;
 
 
-    protected  Update (Connection conn){
+    protected Update(Connection conn) {
         this.conn = conn;
-        db =  DB.getInstance();
+        db = DB.getInstance();
         log = Logger.getLogger(Update.class.getName());
     }
 
     /**
      * update one Scene
+     *
      * @param devices new state of the Devices
-     * @param id id of scene
+     * @param id      id of scene
      */
     public void scene(Device[] devices, int id) throws SQLException {
         ArrayList<Integer> deviceStatusIDs = select.getDeviceStatusIdsForScene(id);
         int iterator = 0;
-        for (int dsid : deviceStatusIDs) {
-           DB.getInstance().Delete.effectsFromDeviceState(dsid);
-            insert.insertEffectStatis(devices[iterator].effects, dsid, false);
-            insert.insertEffectStatis(devices[iterator].main_effect, dsid, true);
+        for (int deviceStatusid : deviceStatusIDs) {
+            db.Delete.effectsFromDeviceState(deviceStatusid);
+            db.Insert.insertEffectStatis(devices[iterator].effects, deviceStatusid, false);
+            db.Insert.insertEffectStatis(devices[iterator].main_effect, deviceStatusid, true);
             String SQL = "update device_status set input ='" + Util.toSaveString(devices[iterator].getInputs())
-                    + "' where device_status_id= " + dsid;
+                    + "' where device_status_id= " + deviceStatusid;
             updateDbData(SQL);
             iterator++;
         }
@@ -46,17 +47,32 @@ public class Update {
 
     /**
      * Update an Scene name
-     * @param id id of the scene
+     *
+     * @param id   id of the scene
      * @param name new name of the scene
      */
-    public void sceneName(int id , String name) throws SQLException {
-        log.config("update scene name for: " + id +" -> " +name);
-        String SQL = "update scene set scene_name = '"+name+"' where scene_id = "+id+";";
+    public void sceneName(int id, String name) throws SQLException {
+        log.config("update scene name for: " + id + " -> " + name);
+        String SQL = "update scene set scene_name = '" + name + "' where scene_id = " + id + ";";
         updateDbData(SQL);
     }
 
+
+    public void chaseName(int chaseid, String name) throws SQLException {
+        String SQL = "update chase set chase_name='" + name + "' where chase_id=" + chaseid + ";";
+        updateDbData(SQL);
+    }
+
+    public void chaseScens(int chaseId, int[] sceneIds, int[] fadeTimes, int[] showTimes) throws SQLException {
+        DB db = DB.getInstance();
+        db.Delete.chaseHasScene(chaseId);
+        db.Insert.chaseHasScene(chaseId, sceneIds, fadeTimes, showTimes);
+    }
+
+
     /**
      * generic function to update the DB with an SQL Statement
+     *
      * @param SQL to executeSQL
      */
     private void updateDbData(String SQL) throws SQLException {
@@ -64,7 +80,7 @@ public class Update {
             Statement query = conn.createStatement();
             query.execute(SQL);
         } catch (SQLException e) {
-            log.severe("Fail to Update DB wit SQL: " + e.toString() );
+            log.severe("Fail to Update DB wit SQL: " + e.toString());
             throw new SQLException(e);
         }
     }
