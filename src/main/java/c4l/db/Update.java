@@ -78,7 +78,7 @@ public class Update {
      * @param showTimes Show times of the new Scenes
      * @throws SQLException
      */
-    public void chaseScens(int chaseId, int[] sceneIds, int[] fadeTimes, int[] showTimes) throws SQLException {
+    public void chaseScenes(int chaseId, int[] sceneIds, int[] fadeTimes, int[] showTimes) throws SQLException {
         DB db = DB.getInstance();
         db.Delete.chaseHasScene(chaseId);
         db.Insert.chaseHasScene(chaseId, sceneIds, fadeTimes, showTimes);
