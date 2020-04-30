@@ -1,6 +1,7 @@
 package c4l.db;
 
 import c4l.db.util.*;
+import com.mysql.cj.result.SqlDateValueFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -146,7 +147,7 @@ public class Insert {
             addSceneToSetUp(setupID, sceneID);
 
             // add Device status to scene
-            addDeviceStatusToScene(deviceStatusIDs, sceneID);
+            addDeviceStatesToScene(deviceStatusIDs, sceneID);
 
             return sceneID;
 
@@ -244,6 +245,30 @@ public class Insert {
 
     }
 
+
+    /**
+     * add device states to an scene
+     *
+     * @param deviceStatusIds ids of the Device states wich should be add to an scene id
+     * @param sceneID id of the scene to which the effects while be added
+     */
+    public void addDeviceStatesToScene(ArrayList<Integer> deviceStatusIds, int sceneID) throws SQLException {
+        log.config("add device status to scene :" + sceneID);
+        String INSERT_DS_TO_SCENE = "insert into scene_has_device_status(scene_id,device_status_id) values(?,?)";
+        try {
+            PreparedStatement insertNewSceneStatement = conn.prepareStatement(INSERT_DS_TO_SCENE);
+            for (int id : deviceStatusIds) {
+                insertNewSceneStatement.setInt(1, sceneID);
+                insertNewSceneStatement.setInt(2, id);
+                insertNewSceneStatement.addBatch();
+            }
+            insertNewSceneStatement.executeBatch();
+
+        } catch (SQLException e) {
+            log.severe("Fail to add Device "+ e);
+            throw new SQLException(e);
+        }
+    }
 
 
 }
